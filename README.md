@@ -1,7 +1,10 @@
 # 🚀 Devolt 코드 채점 API 서버
 
-**Devolt 채점 시스템의 MSA 기반 API 서버입니다.**  
-Spring Boot 백엔드와 채점 워커를 중개하며, 코드 채점 요청을 Redis 태스크 큐에 등록하고 결과를 반환합니다.
+**Devolt 채점 시스템 API 서버입니다.**
+- 주로 Spring Boot와 Redis(Broker)를 중개하는 역할을 합니다.
+- 코드 채점 작업 등록/실행/중지 API를 제공합니다.
+- 코드 채점 작업의 정보를 Redis를 사용해 유지합니다.
+- 실제 코드 실행 작업은 Celery Worker 애플리케이션이 처리합니다.
 
 <br /><br />
 
@@ -11,17 +14,9 @@ Spring Boot 백엔드와 채점 워커를 중개하며, 코드 채점 요청을 
 ## 🧱 채점 요청/응답 처리 구조
 ### 채점 등록/실행/중단 요청
 ```
-End User -> Spring Boot Backend -> Flask API Server -> Redis -> Celery Worker
+End User -> Spring Boot -> Flask API Server -> (Redis -> Flask API Server) -> Spring Boot -> End User
 ```
-- 채점 실행/중단 요청은 WebHook 방식을 통해 비동기적으로 처리됩니다.
-<br />
-
-### 채점 실행 결과 응답
-```
-Celery Worker -> Spring Boot Backend -> End User
-```
-- 채점 실행 결과는 다음과 같은 순서로 전달되며, WebHook 콜백 방식을 사용합니다.
-- 엔드 유저는 구독 중인 SSE 세션을 통해 결과를 전달 받습니다.
+- Redis를 통해 API 요청에 대한 Task를 생성하고 WebHook 방식으로 처리합니다.
 
 <br /><br />
 
