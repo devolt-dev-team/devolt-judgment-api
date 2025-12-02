@@ -141,31 +141,6 @@ signature = hmac.new(
 
 
 
-## Project Structure
-
-```
-coditor-api/
-├── app/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── blueprints/
-│   │   ├── jobs.py
-│   │   └── health.py
-│   ├── services/
-│   │   ├── job_service.py
-│   │   └── auth_service.py
-│   └── repositories/
-│       └── job_repository.py
-├── celery_app.py
-├── requirements.txt
-└── Dockerfile
-```
-<br />
-
-
-
-
-
 ## License
 
 MIT
